@@ -1,16 +1,12 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Doitsu.Ecommerce.Presentation.Shared.Interfaces;
+using Doitsu.Ecommerce.Presentation.Wasm.Services;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Doitsu.Ecommerce.Presentation.PrerenderingServer.Data;
-using Microsoft.AspNetCore.ResponseCompression;
+using System;
+using System.Net.Http;
 
 namespace Doitsu.Ecommerce.Presentation.PrerenderingServer
 {
@@ -27,24 +23,40 @@ namespace Doitsu.Ecommerce.Presentation.PrerenderingServer
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            var apiUrl = Configuration.GetValue<string>("ApiServer:Url");
+            services.AddHttpClient<IWeatherForecastService, HttpWeatherForecastService>((client) =>
+            {
+                client.BaseAddress = new Uri(apiUrl);
+                client.DefaultRequestHeaders.Add("Accept", "application/json");
+            });
+
             services.AddRazorPages();
-            // services.AddServerSideBlazor();
             services.AddResponseCompression(opts =>
             {
-                opts.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(
-                    new[] { "application/octet-stream" });
+                opts.EnableForHttps = true;
+                opts.MimeTypes = new[] {
+                    "text/plain",
+                    "text/css",
+                    "application/javascript",
+                    "text/html",
+                    "application/xml",
+                    "text/xml",
+                    "application/json",
+                    "text/json"
+                };
             });
-            services.AddSingleton<WeatherForecastService>();
+            services.AddControllers();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             app.UseResponseCompression();
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                
+
             }
             else
             {
@@ -52,15 +64,16 @@ namespace Doitsu.Ecommerce.Presentation.PrerenderingServer
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
-
+            
             app.UseHttpsRedirection();
-            app.UseStaticFiles();
 
+            app.UseBlazorFrameworkFiles();
+            app.UseStaticFiles();
             app.UseRouting();
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapBlazorHub();
+                endpoints.MapControllers();
                 endpoints.MapFallbackToPage("/_Host");
             });
         }

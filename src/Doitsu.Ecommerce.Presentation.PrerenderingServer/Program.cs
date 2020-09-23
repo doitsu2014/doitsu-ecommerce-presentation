@@ -22,7 +22,13 @@ namespace Doitsu.Ecommerce.Presentation.PrerenderingServer
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
-                    webBuilder.UseStartup<Startup>();
+                    webBuilder
+                        .UseConfiguration(new ConfigurationBuilder()
+                            .SetBasePath(Directory.GetCurrentDirectory())
+                            .AddIniFile("appsettings.ini", true)
+                            .Build())
+                        .ConfigureAppConfiguration((context, commonBuilder) => commonBuilder.AddJsonFile($"Metadata.json", true, true))
+                        .UseStartup<Startup>();
                 });
     }
 }

@@ -1,15 +1,17 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.26124.0
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29519.181
 MinimumVisualStudioVersion = 15.0.26124.0
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{91FCB20E-F743-4476-8E65-5D5E044BD6A4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Doitsu.Ecommerce.Presentation.Client", "src\Doitsu.Ecommerce.Presentation.Wasm\Doitsu.Ecommerce.Presentation.Wasm.csproj", "{9C46A007-7DB0-4E57-915A-89CB7A0702CB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Doitsu.Ecommerce.Presentation.Wasm", "src\Doitsu.Ecommerce.Presentation.Wasm\Doitsu.Ecommerce.Presentation.Wasm.csproj", "{9C46A007-7DB0-4E57-915A-89CB7A0702CB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Doitsu.Ecommerce.Presentation.PrerenderingServer", "src\Doitsu.Ecommerce.Presentation.PrerenderingServer\Doitsu.Ecommerce.Presentation.PrerenderingServer.csproj", "{F11893F1-1793-42CE-BAB8-7866676C588B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Doitsu.Ecommerce.Presentation.PrerenderingServer", "src\Doitsu.Ecommerce.Presentation.PrerenderingServer\Doitsu.Ecommerce.Presentation.PrerenderingServer.csproj", "{F11893F1-1793-42CE-BAB8-7866676C588B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DevExpress.Blazor.DocumentMetadata", "src\DevExpress.Blazor.DocumentMetadata\DevExpress.Blazor.DocumentMetadata.csproj", "{DA222919-1F4E-4795-B42B-0FBE5B0A0B7D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevExpress.Blazor.DocumentMetadata", "src\DevExpress.Blazor.DocumentMetadata\DevExpress.Blazor.DocumentMetadata.csproj", "{DA222919-1F4E-4795-B42B-0FBE5B0A0B7D}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Doitsu.Ecommerce.Presentation.Shared", "src\Doitsu.Ecommerce.Presentation.Shared\Doitsu.Ecommerce.Presentation.Shared.csproj", "{D5EB60B2-8B33-446B-B3E5-8E5BC4ADEEEC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -19,9 +21,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 		Release|x64 = Release|x64
 		Release|x86 = Release|x86
-	EndGlobalSection
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{9C46A007-7DB0-4E57-915A-89CB7A0702CB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -60,10 +59,29 @@ Global
 		{DA222919-1F4E-4795-B42B-0FBE5B0A0B7D}.Release|x64.Build.0 = Release|Any CPU
 		{DA222919-1F4E-4795-B42B-0FBE5B0A0B7D}.Release|x86.ActiveCfg = Release|Any CPU
 		{DA222919-1F4E-4795-B42B-0FBE5B0A0B7D}.Release|x86.Build.0 = Release|Any CPU
+		{D5EB60B2-8B33-446B-B3E5-8E5BC4ADEEEC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D5EB60B2-8B33-446B-B3E5-8E5BC4ADEEEC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D5EB60B2-8B33-446B-B3E5-8E5BC4ADEEEC}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{D5EB60B2-8B33-446B-B3E5-8E5BC4ADEEEC}.Debug|x64.Build.0 = Debug|Any CPU
+		{D5EB60B2-8B33-446B-B3E5-8E5BC4ADEEEC}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{D5EB60B2-8B33-446B-B3E5-8E5BC4ADEEEC}.Debug|x86.Build.0 = Debug|Any CPU
+		{D5EB60B2-8B33-446B-B3E5-8E5BC4ADEEEC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D5EB60B2-8B33-446B-B3E5-8E5BC4ADEEEC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D5EB60B2-8B33-446B-B3E5-8E5BC4ADEEEC}.Release|x64.ActiveCfg = Release|Any CPU
+		{D5EB60B2-8B33-446B-B3E5-8E5BC4ADEEEC}.Release|x64.Build.0 = Release|Any CPU
+		{D5EB60B2-8B33-446B-B3E5-8E5BC4ADEEEC}.Release|x86.ActiveCfg = Release|Any CPU
+		{D5EB60B2-8B33-446B-B3E5-8E5BC4ADEEEC}.Release|x86.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{9C46A007-7DB0-4E57-915A-89CB7A0702CB} = {91FCB20E-F743-4476-8E65-5D5E044BD6A4}
 		{F11893F1-1793-42CE-BAB8-7866676C588B} = {91FCB20E-F743-4476-8E65-5D5E044BD6A4}
 		{DA222919-1F4E-4795-B42B-0FBE5B0A0B7D} = {91FCB20E-F743-4476-8E65-5D5E044BD6A4}
+		{D5EB60B2-8B33-446B-B3E5-8E5BC4ADEEEC} = {91FCB20E-F743-4476-8E65-5D5E044BD6A4}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {5DCAAC7B-D476-4AB0-A562-4EF98B7BDD21}
 	EndGlobalSection
 EndGlobal

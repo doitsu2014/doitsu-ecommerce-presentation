@@ -1,6 +1,6 @@
 using System;
 
-namespace Doitsu.Ecommerce.Presentation.PrerenderingServer.Data
+namespace Doitsu.Ecommerce.Presentation.Shared
 {
     public class WeatherForecast
     {

@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Doitsu.Ecommerce.Presentation.Shared.Interfaces;
+using Doitsu.Ecommerce.Presentation.Wasm.Services;
 
 namespace Doitsu.Ecommerce.Presentation.Wasm
 {
@@ -17,8 +19,8 @@ namespace Doitsu.Ecommerce.Presentation.Wasm
             var builder = WebAssemblyHostBuilder.CreateDefault(args);
 
             builder.RootComponents.Add<App>("app");
-            builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
-
+            builder.Services.AddTransient(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
+            builder.Services.AddScoped<IWeatherForecastService, HttpWeatherForecastService>();
             await builder.Build().RunAsync();
         }
     }

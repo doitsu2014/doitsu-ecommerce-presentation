@@ -14,6 +14,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\DevExpress.Blazor.DocumentMetadata\DevExpress.Blazor.DocumentMetadata.csproj" />
+    <ProjectReference Include="..\Doitsu.Ecommerce.Presentation.Shared\Doitsu.Ecommerce.Presentation.Shared.csproj" />
   </ItemGroup>
 
 </Project>
