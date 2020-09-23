@@ -17,4 +17,8 @@
     <ProjectReference Include="..\Doitsu.Ecommerce.Presentation.Shared\Doitsu.Ecommerce.Presentation.Shared.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\js\" />
+  </ItemGroup>
+
 </Project>

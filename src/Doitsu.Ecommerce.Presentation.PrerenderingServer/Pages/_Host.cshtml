@@ -10,24 +10,21 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta property="og:url" content="https://dxpr.es/2WogLq7"/>
-    <meta property="og:type" content="website"/>
-    <meta property="og:title" content="Native Blazor Components powered by DevExpress"/>
-    <meta property="og:description" content="DevExpress UI for Blazor ships with native user interface components (including a Data Grid, Pivot Grid, Charts and Scheduler) so you can design rich user experiences with both Blazor."/>
+    <meta property="og:url" content="https://dxpr.es/2WogLq7" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Native Blazor Components powered by DevExpress" />
+    <meta property="og:description" content="DevExpress UI for Blazor ships with native user interface components (including a Data Grid, Pivot Grid, Charts and Scheduler) so you can design rich user experiences with both Blazor." />
     <meta property="og:image" content="https://static.devexpress.com/Products/Blazor/blazor-components-grid-pivot-scheduler-charts-editor-devexpress.jpg" />
 
     <title>Doitsu.Ecommerce.Presentation.PrerenderingServer</title>
     <link rel="stylesheet" href="css/bootstrap/bootstrap.min.css" />
     <link rel="stylesheet" href="css/app.css" />
 
-    <base href="~/"/>
+    <base href="~/" />
 </head>
 <body>
     <app>
         <component type="typeof(Doitsu.Ecommerce.Presentation.Wasm.App)" render-mode="Static" />
-    </app>
-    @* <app>
-        <component type="typeof(App)" render-mode="ServerPrerendered" />
     </app>
 
     <div id="blazor-error-ui">
@@ -39,8 +36,8 @@
         </environment>
         <a href="" class="reload">Reload</a>
         <a class="dismiss">🗙</a>
-    </div> *@
-
+    </div>
+    <script src="js/blazor.polyfill.min.js"></script>
     <script src="_framework/blazor.webassembly.js"></script>
 </body>
 </html>

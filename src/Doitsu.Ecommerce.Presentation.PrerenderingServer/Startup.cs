@@ -23,14 +23,16 @@ namespace Doitsu.Ecommerce.Presentation.PrerenderingServer
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddControllers();
+            services.AddRazorPages();
+            
             var apiUrl = Configuration.GetValue<string>("ApiServer:Url");
             services.AddHttpClient<IWeatherForecastService, HttpWeatherForecastService>((client) =>
             {
                 client.BaseAddress = new Uri(apiUrl);
                 client.DefaultRequestHeaders.Add("Accept", "application/json");
             });
-
-            services.AddRazorPages();
+            
             services.AddResponseCompression(opts =>
             {
                 opts.EnableForHttps = true;
@@ -45,7 +47,6 @@ namespace Doitsu.Ecommerce.Presentation.PrerenderingServer
                     "text/json"
                 };
             });
-            services.AddControllers();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -66,13 +67,13 @@ namespace Doitsu.Ecommerce.Presentation.PrerenderingServer
             }
             
             app.UseHttpsRedirection();
-
             app.UseBlazorFrameworkFiles();
             app.UseStaticFiles();
             app.UseRouting();
 
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapRazorPages();
                 endpoints.MapControllers();
                 endpoints.MapFallbackToPage("/_Host");
             });
