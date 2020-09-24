@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -27,8 +28,17 @@ namespace Doitsu.Ecommerce.Presentation.PrerenderingServer
                             .SetBasePath(Directory.GetCurrentDirectory())
                             .AddIniFile("appsettings.ini", true)
                             .Build())
-                        .ConfigureAppConfiguration((context, commonBuilder) => commonBuilder.AddJsonFile($"Metadata.json", true, true))
+                        .ConfigureAppConfiguration((context, commonBuilder) => {
+                            commonBuilder.AddJsonFile($"Metadata.json", true, true);
+                            commonBuilder.AddEnvironmentVariables();
+                        })
                         .UseStartup<Startup>();
+
+                    var variables = Environment.GetEnvironmentVariables();
+                    foreach (DictionaryEntry variable in variables)
+                    {
+                        Console.WriteLine($"Variable key: {variable.Key}, value: {variable.Value}");
+                    }
                 });
     }
 }

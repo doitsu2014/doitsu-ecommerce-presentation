@@ -12,7 +12,13 @@
       "commandName": "IISExpress",
       "launchBrowser": true,
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "CORECLR_ENABLE_PROFILING": "1",
+        "CORECLR_PROFILER": "{DD0A1BB6-11CE-11DD-8EE8-3F9E55D89593}",
+        "CORECLR_PROFILER_PATH_32": "C:\\Users\\huuduc.tran\\Downloads\\teamscale-profiler-dotnet_v19.6.1.219\\teamscale_dotnet_profiler\\Profiler32.dll",
+        "CORECLR_PROFILER_PATH_64": "C:\\Users\\huuduc.tran\\Downloads\\teamscale-profiler-dotnet_v19.6.1.219\\teamscale_dotnet_profiler\\Profiler64.dll",
+        "CORECLR_PROFILER_TARGETDIR": "C:\\Workspace\\RnD\\teamscale\\traces",
+        "CORECLR_PROFILER_LIGHT_MODE": "1"
       }
     },
     "Doitsu.Ecommerce.Presentation.PrerenderingServer": {
