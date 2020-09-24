@@ -6,7 +6,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Doitsu.Ecommerce.Presentation.Wasm\Doitsu.Ecommerce.Presentation.Wasm.csproj" />
+    <ProjectReference Include="..\Doitsu.Ecommerce.Presentation.ClientSide\Doitsu.Ecommerce.Presentation.ClientSide.csproj" />
   </ItemGroup>
 
   <PropertyGroup>

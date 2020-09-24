@@ -2,9 +2,11 @@ using System;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Components;
 
-namespace DevExpress.Blazor.DocumentMetadata {
+namespace DevExpress.Blazor.DocumentMetadata
+{
 
-    sealed class MetadataRendererComparer : IEqualityComparer<Renderer> {
+    sealed class MetadataRendererComparer : IEqualityComparer<Renderer>
+    {
         public bool Equals(Renderer x, Renderer y) => x.Equals(y);
         public int GetHashCode(Renderer obj) => obj.GetHashCode();
 
@@ -13,16 +15,20 @@ namespace DevExpress.Blazor.DocumentMetadata {
         MetadataRendererComparer() { }
     }
 
-    static class NavigationManagerExtensons {
+    static class NavigationManagerExtensons
+    {
         public static string GetCurrentPageName(this NavigationManager navigationManager) => navigationManager.GetPageNameByLocation(navigationManager.Uri);
-        public static string GetPageNameByLocation(this NavigationManager navigationManager, string location) {
+        public static string GetPageNameByLocation(this NavigationManager navigationManager, string location)
+        {
             var uriFragment = navigationManager.ToAbsoluteUri(location).Fragment;
             if (!string.IsNullOrEmpty(uriFragment))
                 location = location.Replace(uriFragment, "");
             return navigationManager.ToBaseRelativePath(location);
         }
-        public static string ResolveUrl(this NavigationManager navigationManager, string url) {
-            if (url.StartsWith("~/")) {
+        public static string ResolveUrl(this NavigationManager navigationManager, string url)
+        {
+            if (url.StartsWith("~/"))
+            {
                 string baseUrl = navigationManager.BaseUri;
                 string absoluteUrl = baseUrl + url.Substring(2);
                 url = navigationManager.ToBaseRelativePath(absoluteUrl);

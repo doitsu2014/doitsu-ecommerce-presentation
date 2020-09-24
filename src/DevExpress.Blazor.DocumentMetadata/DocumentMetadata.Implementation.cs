@@ -8,31 +8,39 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
 using Microsoft.AspNetCore.Components.Routing;
 
-namespace DevExpress.Blazor.DocumentMetadata {
+namespace DevExpress.Blazor.DocumentMetadata
+{
 
-    sealed class DocumentMetadataSetup {
+    sealed class DocumentMetadataSetup
+    {
         readonly Action<IServiceProvider, IDocumentMetadataCollection> _initialize;
 
         internal DocumentMetadataSetup() : this(null) { }
 
-        internal DocumentMetadataSetup(Action<IServiceProvider, IDocumentMetadataCollection> initialize) {
+        internal DocumentMetadataSetup(Action<IServiceProvider, IDocumentMetadataCollection> initialize)
+        {
             _initialize = initialize;
         }
-        internal void Initialize(IServiceProvider serviceProvider, IDocumentMetadataCollection registrator) {
+        internal void Initialize(IServiceProvider serviceProvider, IDocumentMetadataCollection registrator)
+        {
             _initialize?.Invoke(serviceProvider, registrator);
         }
     }
 
-    sealed class MetadataRendererSet : HashSet<Renderer> {
+    sealed class MetadataRendererSet : HashSet<Renderer>
+    {
         internal MetadataRendererSet() : base(MetadataRendererComparer.Default) { }
     }
 
-    sealed class MetadataCache : ConcurrentDictionary<string, ISet<Renderer>> {
-        internal ISet<Renderer> GetPageRenderers(string pageName) {
+    sealed class MetadataCache : ConcurrentDictionary<string, ISet<Renderer>>
+    {
+        internal ISet<Renderer> GetPageRenderers(string pageName)
+        {
             return GetOrAdd(GetFixedPageName(pageName), (_) => new MetadataRendererSet());
         }
         internal bool TryGetPageRenderers(string pageName, out ISet<Renderer> _) => TryGetValue(GetFixedPageName(pageName), out _);
-        static string GetFixedPageName(string route) {
+        static string GetFixedPageName(string route)
+        {
             if (route.Length == 0 || route[0] != '/')
                 return route.Insert(0, "/");
             else
@@ -40,7 +48,8 @@ namespace DevExpress.Blazor.DocumentMetadata {
         }
     }
 
-    sealed class DocumentMetadataService : IDocumentMetadataCollection, IDocumentMetadataService, IDisposable {
+    sealed class DocumentMetadataService : IDocumentMetadataCollection, IDocumentMetadataService, IDisposable
+    {
 
         static readonly string
             DefaultMetadataCacheKey = $"default_{Guid.NewGuid()}",
@@ -49,10 +58,12 @@ namespace DevExpress.Blazor.DocumentMetadata {
 
         readonly MetadataCache _cache = new MetadataCache();
 
-        public DocumentMetadataService(IServiceProvider serviceProvider, DocumentMetadataSetup setup) {
+        public DocumentMetadataService(IServiceProvider serviceProvider, DocumentMetadataSetup setup)
+        {
             foreach (var VARIABLE in AppDomain.CurrentDomain.GetAssemblies()
                 .Where(IsAssemblyCanContainComponents)
-                .SelectMany(ExtractSeoInfoFromAssembly)) {
+                .SelectMany(ExtractSeoInfoFromAssembly))
+            {
 
                 RegisterSeoInfo(VARIABLE);
             }
@@ -61,7 +72,8 @@ namespace DevExpress.Blazor.DocumentMetadata {
 
         public Action UpdateCompleted { get; set; }
 
-        public void Update(Action<IDocumentMetadataBuilder> update) {
+        public void Update(Action<IDocumentMetadataBuilder> update)
+        {
             update(AddPage(OverrideMetadataCacheKey));
             UpdateCompleted?.Invoke();
         }
@@ -80,7 +92,8 @@ namespace DevExpress.Blazor.DocumentMetadata {
                     Concat(next.Except(prev, MetadataRendererComparer.Default));
 
 
-        void RegisterSeoInfo((string pageName, string moduleName, IEnumerable<IMetadataEntity> containers) tuple) {
+        void RegisterSeoInfo((string pageName, string moduleName, IEnumerable<IMetadataEntity> containers) tuple)
+        {
             var builder = AddPage(tuple.pageName);
             foreach (var container in tuple.containers)
                 container.Instantiate(tuple.moduleName, builder);
@@ -89,7 +102,8 @@ namespace DevExpress.Blazor.DocumentMetadata {
         static IEnumerable<(string, string, IEnumerable<IMetadataEntity>)> ExtractSeoInfoFromAssembly(Assembly assembly) =>
             assembly.GetTypes().Where(IsSeoRelatedPage).Select(ExtractSeoInfoFromType);
 
-        static (string, string, IEnumerable<IMetadataEntity>) ExtractSeoInfoFromType(Type type) {
+        static (string, string, IEnumerable<IMetadataEntity>) ExtractSeoInfoFromType(Type type)
+        {
             return (
                 type.GetCustomAttribute<RouteAttribute>()?.Template ?? DefaultMetadataCacheKey,
                 type.Assembly.GetName().Name,
@@ -97,11 +111,13 @@ namespace DevExpress.Blazor.DocumentMetadata {
             );
         }
 
-        static bool IsAssemblyCanContainComponents(Assembly assembly) {
+        static bool IsAssemblyCanContainComponents(Assembly assembly)
+        {
             return assembly.GetReferencedAssemblies().Any(r => r.Name == RclBaseAssemblyName);
         }
 
-        static bool IsSeoRelatedPage(Type type) {
+        static bool IsSeoRelatedPage(Type type)
+        {
             return type.IsClass && typeof(ComponentBase).IsAssignableFrom(type) &&
                    type.GetCustomAttributes().OfType<IMetadataEntity>().Any();
         }
@@ -114,16 +130,20 @@ namespace DevExpress.Blazor.DocumentMetadata {
         void IDisposable.Dispose() => _cache.Clear();
     }
 
-    sealed class DocumentMetadataObserver : IObservable<Renderer>, IDisposable {
-        readonly struct Unsubscribe : IDisposable {
+    sealed class DocumentMetadataObserver : IObservable<Renderer>, IDisposable
+    {
+        readonly struct Unsubscribe : IDisposable
+        {
             readonly DocumentMetadataObserver _observable;
             readonly Action<Renderer> _subscriber;
-            internal Unsubscribe(DocumentMetadataObserver observable, Action<Renderer> subscriber) {
+            internal Unsubscribe(DocumentMetadataObserver observable, Action<Renderer> subscriber)
+            {
                 _subscriber = subscriber;
                 _observable = observable;
                 _observable._listeners += subscriber;
             }
-            public void Dispose() {
+            public void Dispose()
+            {
                 if (_observable._listeners != null)
                     _observable._listeners -= _subscriber;
             }
@@ -133,7 +153,8 @@ namespace DevExpress.Blazor.DocumentMetadata {
         readonly NavigationManager _navigationManager;
 
         Action<Renderer> _listeners;
-        public DocumentMetadataObserver(DocumentMetadataService metadataService, NavigationManager navigationManager) {
+        public DocumentMetadataObserver(DocumentMetadataService metadataService, NavigationManager navigationManager)
+        {
             _metadataService = metadataService;
             _metadataService.UpdateCompleted += OnServiceUpdateCompleted;
             _navigationManager = navigationManager;
@@ -143,39 +164,47 @@ namespace DevExpress.Blazor.DocumentMetadata {
 
         public IDisposable Subscribe(IObserver<Renderer> observer) => SubscribeListener(observer.OnNext, observer.OnCompleted);
 
-        IDisposable SubscribeListener(Action<Renderer> callback, Action onCompleted) {
+        IDisposable SubscribeListener(Action<Renderer> callback, Action onCompleted)
+        {
             NotifyListener(callback);
             onCompleted();
             return new Unsubscribe(this, callback);
         }
 
         void OnLocationChanged(object sender, LocationChangedEventArgs e) => OnServiceUpdateCompleted();
-        void OnServiceUpdateCompleted() {
+        void OnServiceUpdateCompleted()
+        {
             if (_listeners != null)
                 NotifyListener(_listeners);
         }
-        void NotifyListener(Action<Renderer> callback) {
+        void NotifyListener(Action<Renderer> callback)
+        {
             foreach (var renderer in _metadataService.GetRenderers(_navigationManager.GetCurrentPageName()))
                 callback(renderer);
         }
 
-        void IDisposable.Dispose() {
+        void IDisposable.Dispose()
+        {
             _metadataService.UpdateCompleted -= OnServiceUpdateCompleted;
             _navigationManager.LocationChanged -= OnLocationChanged;
         }
     }
 
-    sealed class DocumentMetadataBuilder : IDocumentMetadataBuilder {
+    sealed class DocumentMetadataBuilder : IDocumentMetadataBuilder
+    {
         readonly ISet<Renderer> _renderers;
         readonly string _pageName;
-        public override string ToString() {
+        public override string ToString()
+        {
             return $"{_pageName}";
         }
-        internal DocumentMetadataBuilder(string pageName, ISet<Renderer> renderers) {
+        internal DocumentMetadataBuilder(string pageName, ISet<Renderer> renderers)
+        {
             _renderers = renderers;
             _pageName = pageName;
         }
-        IDocumentMetadataBuilder UpdateWith(ISet<Renderer> source, in Renderer update) {
+        IDocumentMetadataBuilder UpdateWith(ISet<Renderer> source, in Renderer update)
+        {
             source.Remove(update);
             source.Add(update);
             return this;

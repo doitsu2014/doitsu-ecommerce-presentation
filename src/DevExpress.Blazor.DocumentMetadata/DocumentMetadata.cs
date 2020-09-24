@@ -2,13 +2,16 @@ using System;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
-namespace DevExpress.Blazor.DocumentMetadata {
+namespace DevExpress.Blazor.DocumentMetadata
+{
 
-    interface IMetadataEntity {
+    interface IMetadataEntity
+    {
         void Instantiate(string moduleName, IDocumentMetadataBuilder builder);
     }
 
-    public interface IDocumentMetadataBuilder {
+    public interface IDocumentMetadataBuilder
+    {
         IDocumentMetadataBuilder Base(string url);
         IDocumentMetadataBuilder Title(string title);
         IDocumentMetadataBuilder TitleFormat(string format);
@@ -19,15 +22,19 @@ namespace DevExpress.Blazor.DocumentMetadata {
         IDocumentMetadataBuilder StyleSheet(string name, string styleSheetUrl);
         IDocumentMetadataBuilder Script(string name, string scriptUrl, bool async = false, bool defer = false);
     }
-    public interface IDocumentMetadataService {
+    public interface IDocumentMetadataService
+    {
         void Update(Action<IDocumentMetadataBuilder> update);
     }
-    public interface IDocumentMetadataCollection {
+    public interface IDocumentMetadataCollection
+    {
         IDocumentMetadataBuilder AddDefault();
         IDocumentMetadataBuilder AddPage(string pageName);
     }
-    public static partial class DocumentMetadataExtensions {
-        public static IServiceCollection AddDocumentMetadata(this IServiceCollection services) {
+    public static partial class DocumentMetadataExtensions
+    {
+        public static IServiceCollection AddDocumentMetadata(this IServiceCollection services)
+        {
             services.TryAddSingleton<DocumentMetadataSetup>(_ => new DocumentMetadataSetup());
             services.AddScoped<DocumentMetadataService>();
             services.AddScoped<IDocumentMetadataService>(sp => sp.GetService<DocumentMetadataService>());

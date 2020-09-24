@@ -1,12 +1,15 @@
 using System;
 
-namespace DevExpress.Blazor.DocumentMetadata {
+namespace DevExpress.Blazor.DocumentMetadata
+{
 
     [AttributeUsage(AttributeTargets.Class, Inherited = false, AllowMultiple = false)]
-    public sealed class RequireJavascriptApiAttribute : Attribute, IMetadataEntity {
+    public sealed class RequireJavascriptApiAttribute : Attribute, IMetadataEntity
+    {
         readonly string _moduleLoaderName;
 
-        public RequireJavascriptApiAttribute(string moduleLoaderName) {
+        public RequireJavascriptApiAttribute(string moduleLoaderName)
+        {
             if (string.IsNullOrEmpty(moduleLoaderName)) throw new ArgumentException(nameof(moduleLoaderName));
 
             _moduleLoaderName = moduleLoaderName;
@@ -17,10 +20,12 @@ namespace DevExpress.Blazor.DocumentMetadata {
     }
 
     [AttributeUsage(AttributeTargets.Class, Inherited = false, AllowMultiple = false)]
-    public sealed class SeoTitleAttribute : Attribute, IMetadataEntity {
+    public sealed class SeoTitleAttribute : Attribute, IMetadataEntity
+    {
         readonly string _title;
 
-        public SeoTitleAttribute(string title) {
+        public SeoTitleAttribute(string title)
+        {
             if (string.IsNullOrEmpty(title)) throw new ArgumentException(nameof(title));
 
             _title = title;
@@ -31,10 +36,12 @@ namespace DevExpress.Blazor.DocumentMetadata {
 
 
     [AttributeUsage(AttributeTargets.Class, Inherited = false, AllowMultiple = false)]
-    public sealed class SeoKeywordsAttribute : Attribute, IMetadataEntity {
+    public sealed class SeoKeywordsAttribute : Attribute, IMetadataEntity
+    {
         readonly string _keywords;
 
-        public SeoKeywordsAttribute(string keywords) {
+        public SeoKeywordsAttribute(string keywords)
+        {
             if (string.IsNullOrEmpty(keywords)) throw new ArgumentException(nameof(keywords));
 
             _keywords = keywords;
@@ -45,10 +52,12 @@ namespace DevExpress.Blazor.DocumentMetadata {
 
 
     [AttributeUsage(AttributeTargets.Class, Inherited = false, AllowMultiple = false)]
-    public sealed class SeoDescriptionAttribute : Attribute, IMetadataEntity {
+    public sealed class SeoDescriptionAttribute : Attribute, IMetadataEntity
+    {
         readonly string _description;
 
-        public SeoDescriptionAttribute(string description) {
+        public SeoDescriptionAttribute(string description)
+        {
             if (string.IsNullOrEmpty(description)) throw new ArgumentException(nameof(description));
 
             _description = description;

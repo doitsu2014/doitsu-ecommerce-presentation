@@ -6,7 +6,7 @@ using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
 
-namespace Doitsu.Ecommerce.Presentation.Wasm.Services
+namespace Doitsu.Ecommerce.Presentation.ClientSide.Services
 {
     public class HttpWeatherForecastService : IWeatherForecastService
     {

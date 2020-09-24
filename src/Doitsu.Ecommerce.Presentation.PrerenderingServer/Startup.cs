@@ -1,5 +1,5 @@
 using Doitsu.Ecommerce.Presentation.Shared.Interfaces;
-using Doitsu.Ecommerce.Presentation.Wasm.Services;
+using Doitsu.Ecommerce.Presentation.ClientSide.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;

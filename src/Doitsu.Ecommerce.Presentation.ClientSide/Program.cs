@@ -8,9 +8,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Doitsu.Ecommerce.Presentation.Shared.Interfaces;
-using Doitsu.Ecommerce.Presentation.Wasm.Services;
+using Doitsu.Ecommerce.Presentation.ClientSide.Services;
 
-namespace Doitsu.Ecommerce.Presentation.Wasm
+namespace Doitsu.Ecommerce.Presentation.ClientSide
 {
     public class Program
     {
