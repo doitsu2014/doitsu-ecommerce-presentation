@@ -94,6 +94,16 @@ namespace Doitsu.Ecommerce.Presentation.Server
                     options.UseAspNetCore();
                 });
 
+            services.AddAuthentication()
+                .AddGoogle(options =>
+                {
+                    IConfigurationSection googleAuthNSection =
+                        Configuration.GetSection("Authentication:Google");
+
+                    options.ClientId = googleAuthNSection["ClientId"];
+                    options.ClientSecret = googleAuthNSection["ClientSecret"];
+                });
+
             services.AddControllersWithViews();
             services.AddRazorPages();
 
