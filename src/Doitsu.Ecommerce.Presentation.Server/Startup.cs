@@ -1,21 +1,30 @@
 using Doitsu.Ecommerce.Presentation.Server.Data;
+using Doitsu.Ecommerce.Presentation.Server.Extensions;
 using Doitsu.Ecommerce.Presentation.Server.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System.IO;
+using System.Security.Cryptography.X509Certificates;
 using static OpenIddict.Abstractions.OpenIddictConstants;
 
 namespace Doitsu.Ecommerce.Presentation.Server
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration) => Configuration = configuration;
-
         public IConfiguration Configuration { get; }
+        public IHostEnvironment Environment { get; }
+
+        public Startup(IConfiguration configuration, IHostEnvironment env)
+        {
+            Configuration = configuration;
+            Environment = env;
+        }
 
         public void ConfigureServices(IServiceCollection services)
         {
@@ -30,9 +39,18 @@ namespace Doitsu.Ecommerce.Presentation.Server
                 options.UseOpenIddict();
             });
 
-            services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
+            services.AddDefaultIdentity<ApplicationUser>(options =>
+                {
+                    // If this mode is true, system should implement the email sender service
+                    // Note: https://docs.microsoft.com/en-us/aspnet/core/security/authentication/accconfirm
+                    options.SignIn.RequireConfirmedAccount = false;
+
+                    options.Lockout.MaxFailedAccessAttempts = 5;
+                })
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
+
+            services.AddScoped<IUserClaimsPrincipalFactory<ApplicationUser>, ApplicationUserClaimsPrincipalFactory>();
 
             // Configure Identity to use the same JWT claims as OpenIddict instead
             // of the legacy WS-Federation claims it uses by default (ClaimTypes),
@@ -72,9 +90,27 @@ namespace Doitsu.Ecommerce.Presentation.Server
                     options.AllowAuthorizationCodeFlow()
                            .AllowRefreshTokenFlow();
 
-                    // Register the signing and encryption credentials.
-                    options.AddDevelopmentEncryptionCertificate()
-                           .AddDevelopmentSigningCertificate();
+                    if (!Environment.IsDevelopment())
+                    {
+                        // Register the signing and encryption credentials.
+                        options.AddDevelopmentEncryptionCertificate()
+                            .AddDevelopmentSigningCertificate();
+                    }
+                    else
+                    {
+                        var certSection = Configuration.GetSection("OpenIdServerCertificate");
+                        var x509 = new X509Certificate2(File.ReadAllBytes(certSection["FileName"]), certSection["Password"]);
+                        options.AddSigningCertificate(x509)
+                            .AddEncryptionCertificate(x509);
+                    }
+
+                    if (IsCluster())
+                    {
+                        services.Configure<ForwardedHeadersOptions>(options =>
+                        {
+                            options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
+                        });
+                    }
 
                     // Register the ASP.NET Core host and configure the ASP.NET Core-specific options.
                     options.UseAspNetCore()
@@ -97,9 +133,7 @@ namespace Doitsu.Ecommerce.Presentation.Server
             services.AddAuthentication()
                 .AddGoogle(options =>
                 {
-                    IConfigurationSection googleAuthNSection =
-                        Configuration.GetSection("Authentication:Google");
-
+                    IConfigurationSection googleAuthNSection = Configuration.GetSection("Authentication:Google");
                     options.ClientId = googleAuthNSection["ClientId"];
                     options.ClientSecret = googleAuthNSection["ClientSecret"];
                 });
@@ -125,6 +159,15 @@ namespace Doitsu.Ecommerce.Presentation.Server
                 app.UseHsts();
             }
 
+            if (IsCluster())
+            {
+                app.Use((context, next) =>
+                {
+                    context.Request.Scheme = "https";
+                    return next();
+                });
+            }
+
             app.UseHttpsRedirection();
             app.UseBlazorFrameworkFiles();
             app.UseStaticFiles();
@@ -140,6 +183,12 @@ namespace Doitsu.Ecommerce.Presentation.Server
                 options.MapControllers();
                 options.MapFallbackToFile("index.html");
             });
+        }
+
+
+        private bool IsCluster()
+        {
+            return Configuration.GetValue<bool>("Operation:IsCluster");
         }
     }
 }
