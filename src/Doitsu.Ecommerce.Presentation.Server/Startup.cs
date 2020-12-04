@@ -1,10 +1,12 @@
 using Doitsu.Ecommerce.Presentation.Server.Data;
 using Doitsu.Ecommerce.Presentation.Server.Extensions;
 using Doitsu.Ecommerce.Presentation.Server.Models;
+using Doitsu.Ecommerce.Presentation.Server.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -39,7 +41,7 @@ namespace Doitsu.Ecommerce.Presentation.Server
                 options.UseOpenIddict();
             });
 
-            services.AddDefaultIdentity<ApplicationUser>(options =>
+            services.AddIdentity<ApplicationUser, IdentityRole>(options =>
                 {
                     // If this mode is true, system should implement the email sender service
                     // Note: https://docs.microsoft.com/en-us/aspnet/core/security/authentication/accconfirm
@@ -51,6 +53,7 @@ namespace Doitsu.Ecommerce.Presentation.Server
                 .AddDefaultTokenProviders();
 
             services.AddScoped<IUserClaimsPrincipalFactory<ApplicationUser>, ApplicationUserClaimsPrincipalFactory>();
+            services.AddScoped<IEmailSender, AuthMessageService>();
 
             // Configure Identity to use the same JWT claims as OpenIddict instead
             // of the legacy WS-Federation claims it uses by default (ClaimTypes),

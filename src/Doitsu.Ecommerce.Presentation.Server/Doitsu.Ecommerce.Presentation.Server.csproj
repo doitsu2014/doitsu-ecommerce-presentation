@@ -5,7 +5,7 @@
     <UserSecretsId>66f69508-ca7c-41cf-abb8-b673539b8cd2</UserSecretsId>
   </PropertyGroup>
 
-  <PropertyGroup Condition=" '$(RunConfiguration)' == 'Balosar.Server' " />
+  <PropertyGroup Condition=" '$(RunConfiguration)' == 'Doitsu.Ecommerce.Presentation.Server' " />
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="5.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="5.0.0" />

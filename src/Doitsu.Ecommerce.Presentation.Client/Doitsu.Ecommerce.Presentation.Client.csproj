@@ -20,4 +20,14 @@
     <ProjectReference Include="..\Doitsu.Ecommerce.Presentation.Shared\Doitsu.Ecommerce.Presentation.Shared.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\identity-bundle\css\" />
+    <Folder Include="wwwroot\identity-bundle\js\" />
+    <Folder Include="wwwroot\identity-bundle\lib\bootstrap\dist\css\" />
+    <Folder Include="wwwroot\identity-bundle\lib\bootstrap\dist\js\" />
+    <Folder Include="wwwroot\identity-bundle\lib\jquery-validation-unobtrusive\" />
+    <Folder Include="wwwroot\identity-bundle\lib\jquery-validation\dist\" />
+    <Folder Include="wwwroot\identity-bundle\lib\jquery\dist\" />
+  </ItemGroup>
+
 </Project>
