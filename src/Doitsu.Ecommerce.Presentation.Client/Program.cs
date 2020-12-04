@@ -32,6 +32,10 @@ namespace Doitsu.Ecommerce.Presentation.Client
                 options.ProviderOptions.ResponseType = "code";
                 options.ProviderOptions.ResponseMode = "fragment";
                 options.AuthenticationPaths.RemoteRegisterPath = "https://localhost:5001/Identity/Account/Register";
+                // options.AuthenticationPaths.LogInCallbackPath = "https://localhost:5001/Identity/Account/Login";
+                // options.AuthenticationPaths.RemoteProfilePath = "https://localhost:5001/Identity/Account/Profile";
+                // options.AuthenticationPaths.Log = "https://localhost:5001/Identity/Account/Login";
+                // options.AuthenticationPaths.LogOutPath = "https://localhost:5001/Identity/Account/Logout";
             });
 
             var host = builder.Build();
