@@ -20,7 +20,7 @@ namespace Doitsu.Ecommerce.Presentation.Server.Services
             settings = smtpClientSettingsOptions.Value;
         }
 
-        public Task SendEmailAsync(string email, string subject, string htmlMessage)
+        public async Task SendEmailAsync(string email, string subject, string htmlMessage)
         {
             var client = new SmtpClient(settings.Host, settings.Port)
             {
@@ -28,7 +28,7 @@ namespace Doitsu.Ecommerce.Presentation.Server.Services
                 EnableSsl = settings.EnableSsl
             };
 
-            return client.SendMailAsync(
+            await client.SendMailAsync(
                 new MailMessage(settings.Mail, email, subject, htmlMessage) { IsBodyHtml = true }
             );
         }

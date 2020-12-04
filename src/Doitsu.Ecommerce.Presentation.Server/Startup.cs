@@ -49,8 +49,7 @@ namespace Doitsu.Ecommerce.Presentation.Server
                 {
                     // If this mode is true, system should implement the email sender service
                     // Note: https://docs.microsoft.com/en-us/aspnet/core/security/authentication/accconfirm
-                    options.SignIn.RequireConfirmedAccount = false;
-
+                    options.SignIn.RequireConfirmedAccount = true;
                     options.Lockout.MaxFailedAccessAttempts = 5;
                 })
                 .AddEntityFrameworkStores<ApplicationDbContext>()
