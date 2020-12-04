@@ -29,13 +29,13 @@ namespace Doitsu.Ecommerce.Presentation.Server
             var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
             await context.Database.EnsureCreatedAsync();
 
-            await RegisterDefaultClientsAsync(scope);
+            await RegisterDefaultClientsAsync(scope.ServiceProvider);
             await RegisterDefaultUsersAsync(scope.ServiceProvider);
         }
 
-        private async Task RegisterDefaultClientsAsync(IServiceScope scope)
+        private async Task RegisterDefaultClientsAsync(IServiceProvider serviceProvider)
         {
-            var manager = scope.ServiceProvider.GetRequiredService<OpenIddictApplicationManager<OpenIddictEntityFrameworkCoreApplication>>();
+            var manager = serviceProvider.GetRequiredService<OpenIddictApplicationManager<OpenIddictEntityFrameworkCoreApplication>>();
             if (await manager.FindByClientIdAsync("balosar-blazor-client") is null)
             {
                 await manager.CreateAsync(new OpenIddictApplicationDescriptor
@@ -74,11 +74,11 @@ namespace Doitsu.Ecommerce.Presentation.Server
 
         }
 
-        private async Task RegisterDefaultUsersAsync(IServiceProvider provider)
+        private async Task RegisterDefaultUsersAsync(IServiceProvider serviceProvider)
         {
-            var userManager = provider.GetRequiredService<UserManager<ApplicationUser>>();
-            var roleManager = provider.GetRequiredService<RoleManager<IdentityRole>>();
-            var configuration = provider.GetRequiredService<IConfiguration>();
+            var userManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+            var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+            var configuration = serviceProvider.GetRequiredService<IConfiguration>();
             var adminUserSection = configuration.GetSection("Initial:AdminUser");
 
             if (userManager.Users.Count() == 0)
