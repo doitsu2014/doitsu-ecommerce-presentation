@@ -14,6 +14,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System.IO;
 using System.Security.Cryptography.X509Certificates;
+using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.AspNetCore.Components.Server;
+using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
+using Microsoft.JSInterop;
 using static OpenIddict.Abstractions.OpenIddictConstants;
 
 namespace Doitsu.Ecommerce.Presentation.Server
@@ -146,6 +150,17 @@ namespace Doitsu.Ecommerce.Presentation.Server
 
             services.AddControllersWithViews();
             services.AddRazorPages();
+            // Added by me
+            services.AddScoped<AuthenticationStateProvider, ServerAuthenticationStateProvider>();
+            
+            // services.AddRemoteAuthentication<RemoteAuthenticationState, RemoteUserAccount, OidcProviderOptions>();
+            // services.AddScoped<AuthenticationStateProvider, RemoteAuthenticationService>()
+            //     .AddScoped<SignOutSessionStateManager>()
+            //     .AddTransient<IAccessTokenProvider, AccessTokenProvider>()
+            //     .AddTransient<Microsoft.JSInterop.IJSRuntime, JSRuntime>();
+            
+            // Added by me
+            services.AddScoped<SignOutSessionStateManager>();
 
             // Register the worker responsible of seeding the database with the sample clients.
             // Note: in a real world application, this step should be part of a setup script.
@@ -187,10 +202,9 @@ namespace Doitsu.Ecommerce.Presentation.Server
             {
                 options.MapRazorPages();
                 options.MapControllers();
-                options.MapFallbackToFile("index.html");
+                options.MapFallbackToPage("/_ClientHost");
             });
         }
-
 
         private bool IsCluster()
         {

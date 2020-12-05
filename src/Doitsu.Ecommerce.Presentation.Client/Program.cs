@@ -12,7 +12,7 @@ namespace Doitsu.Ecommerce.Presentation.Client
         public static Task Main(string[] args)
         {
             var builder = WebAssemblyHostBuilder.CreateDefault(args);
-            builder.RootComponents.Add<App>("#app");
+            // builder.RootComponents.Add<App>("#app");
 
             builder.Services.AddHttpClient("Doitsu.Ecommerce.Presentation.ServerAPI")
                 .ConfigureHttpClient(client => client.BaseAddress = new Uri(builder.HostEnvironment.BaseAddress))
@@ -24,7 +24,7 @@ namespace Doitsu.Ecommerce.Presentation.Client
                 var factory = provider.GetRequiredService<IHttpClientFactory>();
                 return factory.CreateClient("Doitsu.Ecommerce.Presentation.ServerAPI");
             });
-
+            
             builder.Services.AddOidcAuthentication(options =>
             {
                 options.ProviderOptions.ClientId = "balosar-blazor-client";

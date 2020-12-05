@@ -1,0 +1,30 @@
+@page
+@using Doitsu.Ecommerce.Presentation.Client
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, 
+                 maximum-scale=1.0, user-scalable=no"/>
+    <title>Your Site</title>
+    <base href="/"/>
+    <link href="blazor-client-resources/css/bootstrap/bootstrap.min.css" rel="stylesheet"/>
+    <link href="blazor-client-resources/css/app.css" rel="stylesheet"/>
+    <link href="Doitsu.Ecommerce.Presentation.Client.styles.css" rel="stylesheet"/>
+</head>
+
+<body>
+
+    <component type="typeof(App)" render-mode="@(HttpContext.Request.Path.StartsWithSegments("/authentication") 
+                                                   ? RenderMode.WebAssembly 
+                                                   : RenderMode.WebAssemblyPrerendered)"/>
+
+<script src="_content/Microsoft.AspNetCore.Components.WebAssembly.Authentication/AuthenticationService.js"></script>
+<script src="_framework/blazor.webassembly.js"></script>
+</body>
+</html>

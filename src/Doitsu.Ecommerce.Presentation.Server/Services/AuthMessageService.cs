@@ -13,23 +13,23 @@ namespace Doitsu.Ecommerce.Presentation.Server.Services
 {
     public class AuthMessageService : IEmailSender
     {
-        private readonly SmtpClientSettings settings;
+        private readonly SmtpClientSettings _settings;
 
         public AuthMessageService(IOptions<SmtpClientSettings> smtpClientSettingsOptions)
         {
-            settings = smtpClientSettingsOptions.Value;
+            _settings = smtpClientSettingsOptions.Value;
         }
 
         public async Task SendEmailAsync(string email, string subject, string htmlMessage)
         {
-            var client = new SmtpClient(settings.Host, settings.Port)
+            var client = new SmtpClient(_settings.Host, _settings.Port)
             {
-                Credentials = new NetworkCredential(settings.Mail, settings.Password),
-                EnableSsl = settings.EnableSsl
+                Credentials = new NetworkCredential(_settings.Mail, _settings.Password),
+                EnableSsl = _settings.EnableSsl
             };
 
             await client.SendMailAsync(
-                new MailMessage(settings.Mail, email, subject, htmlMessage) { IsBodyHtml = true }
+                new MailMessage(_settings.Mail, email, subject, htmlMessage) { IsBodyHtml = true }
             );
         }
     }
