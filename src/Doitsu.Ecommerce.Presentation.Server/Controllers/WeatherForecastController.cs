@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Doitsu.Ecommerce.Presentation.Shared;
+using Doitsu.Ecommerce.Presentation.Shared.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using OpenIddict.Validation.AspNetCore;
@@ -12,22 +14,17 @@ namespace Doitsu.Ecommerce.Presentation.Server.Controllers
     [ApiController, Route("[controller]")]
     public class WeatherForecastController : ControllerBase
     {
-        private static readonly string[] Summaries = new[]
+        private readonly IWeatherForecastService _weatherForecastService;
+
+        public WeatherForecastController(IWeatherForecastService weatherForecastService)
         {
-            "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-        };
+            _weatherForecastService = weatherForecastService;
+        } 
 
         [HttpGet]
-        public IEnumerable<WeatherForecast> Get()
+        public async Task<IEnumerable<WeatherForecast>> Get()
         {
-            var random = new Random();
-            return Enumerable.Range(1, 5).Select(index => new WeatherForecast
-            {
-                Date = DateTime.Now.AddDays(index),
-                TemperatureC = random.Next(-20, 55),
-                Summary = Summaries[random.Next(Summaries.Length)]
-            })
-            .ToArray();
+            return await _weatherForecastService.GetForecastAsync();
         }
     }
 }

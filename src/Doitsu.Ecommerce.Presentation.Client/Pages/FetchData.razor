@@ -2,9 +2,10 @@
 @using Microsoft.AspNetCore.Authorization
 @using Microsoft.AspNetCore.Components.WebAssembly.Authentication
 @using Doitsu.Ecommerce.Presentation.Shared
+@using Doitsu.Ecommerce.Presentation.Shared.Interfaces
 
 @attribute [Authorize]
-@inject HttpClient Http
+@inject IWeatherForecastService _weatherForecastService
 
 <h1>Weather forecast</h1>
 
@@ -46,7 +47,7 @@ else
     {
         try
         {
-            forecasts = await Http.GetFromJsonAsync<WeatherForecast[]>("WeatherForecast");
+            forecasts = await _weatherForecastService.GetForecastAsync();
         }
         catch (AccessTokenNotAvailableException exception)
         {

@@ -1,6 +1,8 @@
 using System;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Doitsu.Ecommerce.Presentation.Shared.Interfaces;
+using Doitsu.Ecommerce.Presentation.Shared.Services;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.DependencyInjection;
@@ -17,6 +19,8 @@ namespace Doitsu.Ecommerce.Presentation.Client
             builder.Services.AddHttpClient("Doitsu.Ecommerce.Presentation.ServerAPI")
                 .ConfigureHttpClient(client => client.BaseAddress = new Uri(builder.HostEnvironment.BaseAddress))
                 .AddHttpMessageHandler<BaseAddressAuthorizationMessageHandler>();
+
+            builder.Services.AddScoped<IWeatherForecastService, WeatherForecastService>();
 
             // Supply HttpClient instances that include access tokens when making requests to the server project.
             builder.Services.AddScoped(provider =>

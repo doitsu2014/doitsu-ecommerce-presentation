@@ -14,10 +14,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System.IO;
 using System.Security.Cryptography.X509Certificates;
+using Doitsu.Ecommerce.Presentation.Shared.Interfaces;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Server;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
-using Microsoft.JSInterop;
 using static OpenIddict.Abstractions.OpenIddictConstants;
 
 namespace Doitsu.Ecommerce.Presentation.Server
@@ -161,6 +161,7 @@ namespace Doitsu.Ecommerce.Presentation.Server
             
             // Added by me
             services.AddScoped<SignOutSessionStateManager>();
+            services.AddSingleton<IWeatherForecastService, WeatherForecastService>();
 
             // Register the worker responsible of seeding the database with the sample clients.
             // Note: in a real world application, this step should be part of a setup script.
