@@ -116,9 +116,9 @@ namespace Doitsu.Ecommerce.Presentation.Server
 
                     if (IsCluster())
                     {
-                        services.Configure<ForwardedHeadersOptions>(options =>
+                        services.Configure<ForwardedHeadersOptions>(opt =>
                         {
-                            options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
+                            opt.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
                         });
                     }
 
@@ -152,15 +152,9 @@ namespace Doitsu.Ecommerce.Presentation.Server
             services.AddRazorPages();
             // Added by me
             services.AddScoped<AuthenticationStateProvider, ServerAuthenticationStateProvider>();
-            
-            // services.AddRemoteAuthentication<RemoteAuthenticationState, RemoteUserAccount, OidcProviderOptions>();
-            // services.AddScoped<AuthenticationStateProvider, RemoteAuthenticationService>()
-            //     .AddScoped<SignOutSessionStateManager>()
-            //     .AddTransient<IAccessTokenProvider, AccessTokenProvider>()
-            //     .AddTransient<Microsoft.JSInterop.IJSRuntime, JSRuntime>();
-            
             // Added by me
             services.AddScoped<SignOutSessionStateManager>();
+            
             services.AddSingleton<IWeatherForecastService, WeatherForecastService>();
 
             // Register the worker responsible of seeding the database with the sample clients.
