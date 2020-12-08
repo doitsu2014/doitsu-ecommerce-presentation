@@ -50,6 +50,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Configurations\" />
+    <Folder Include="wwwroot\adminlte" />
   </ItemGroup>
   <ItemGroup>
     <None Update="Configurations\*">
