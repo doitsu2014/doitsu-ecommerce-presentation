@@ -50,7 +50,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Configurations\" />
-    <Folder Include="wwwroot\identity-site" />
   </ItemGroup>
   <ItemGroup>
     <None Update="Configurations\*">
