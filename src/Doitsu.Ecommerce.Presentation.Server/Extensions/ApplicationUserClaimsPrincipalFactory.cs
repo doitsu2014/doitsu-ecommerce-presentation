@@ -1,5 +1,5 @@
-﻿using Doitsu.Ecommerce.Presentation.Server.Constants;
-using Doitsu.Ecommerce.Presentation.Server.Models;
+﻿using Doitsu.Ecosystem.ApplicationCore.Constants;
+using Doitsu.Ecosystem.ApplicationCore.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using System;

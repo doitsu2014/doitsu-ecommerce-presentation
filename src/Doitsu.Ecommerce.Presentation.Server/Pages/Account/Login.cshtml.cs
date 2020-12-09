@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
-using Doitsu.Ecommerce.Presentation.Server.Models;
+using Doitsu.Ecosystem.ApplicationCore.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
@@ -44,11 +44,13 @@ namespace Doitsu.Ecommerce.Presentation.Server.Areas.Identity.Pages.Account
         public class InputModel
         {
             [Required]
-            [EmailAddress(Placeh)]
+            [EmailAddress]
+            [Display(Prompt = "Enter email")]
             public string Email { get; set; }
 
             [Required]
             [DataType(DataType.Password)]
+            [Display(Prompt = "Enter password")]
             public string Password { get; set; }
 
             [Display(Name = "Remember me?")]

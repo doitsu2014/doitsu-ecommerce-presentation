@@ -4,7 +4,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Doitsu.Ecommerce.Presentation.Server.Helpers;
-using Doitsu.Ecommerce.Presentation.Server.Models;
+using Doitsu.Ecosystem.ApplicationCore.Models;
 using Doitsu.Ecommerce.Presentation.Server.ViewModels.Authorization;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Authentication;

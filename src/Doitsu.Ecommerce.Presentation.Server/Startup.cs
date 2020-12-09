@@ -1,6 +1,6 @@
-using Doitsu.Ecommerce.Presentation.Server.Data;
+using Doitsu.Ecosystem.Infrastructure.Data;
 using Doitsu.Ecommerce.Presentation.Server.Extensions;
-using Doitsu.Ecommerce.Presentation.Server.Models;
+using Doitsu.Ecosystem.ApplicationCore.Models;
 using Doitsu.Ecommerce.Presentation.Server.Services;
 using Doitsu.Ecommerce.Presentation.Server.Settings;
 using Microsoft.AspNetCore.Builder;
@@ -18,6 +18,7 @@ using Doitsu.Ecommerce.Presentation.Shared.Interfaces;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Server;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
+using Microsoft.AspNetCore.Mvc;
 using static OpenIddict.Abstractions.OpenIddictConstants;
 
 namespace Doitsu.Ecommerce.Presentation.Server
@@ -72,25 +73,32 @@ namespace Doitsu.Ecommerce.Presentation.Server
                 options.ClaimsIdentity.RoleClaimType = Claims.Role;
             });
 
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_3_0)
+                .AddRazorPagesOptions(options =>
+                {
+                    options.Conventions.AuthorizeFolder("/Account/Manage");
+                    options.Conventions.AuthorizePage("/Account/Logout");
+                });
+
             services.AddOpenIddict()
 
                 // Register the OpenIddict core components.
                 .AddCore(options =>
-                 {
-                     // Configure OpenIddict to use the Entity Framework Core stores and models.
-                     // Note: call ReplaceDefaultEntities() to replace the default OpenIddict entities.
-                     options.UseEntityFrameworkCore()
-                            .UseDbContext<ApplicationDbContext>();
-                 })
+                {
+                    // Configure OpenIddict to use the Entity Framework Core stores and models.
+                    // Note: call ReplaceDefaultEntities() to replace the default OpenIddict entities.
+                    options.UseEntityFrameworkCore()
+                        .UseDbContext<ApplicationDbContext>();
+                })
 
                 // Register the OpenIddict server components.
                 .AddServer(options =>
                 {
                     // Enable the authorization, logout, token and userinfo endpoints.
                     options.SetAuthorizationEndpointUris("/connect/authorize")
-                           .SetLogoutEndpointUris("/connect/logout")
-                           .SetTokenEndpointUris("/connect/token")
-                           .SetUserinfoEndpointUris("/connect/userinfo");
+                        .SetLogoutEndpointUris("/connect/logout")
+                        .SetTokenEndpointUris("/connect/token")
+                        .SetUserinfoEndpointUris("/connect/userinfo");
 
                     // Mark the "email", "profile" and "roles" scopes as supported scopes.
                     options.RegisterScopes(Scopes.Email, Scopes.Profile, Scopes.Roles);
@@ -98,7 +106,7 @@ namespace Doitsu.Ecommerce.Presentation.Server
                     // Note: the sample uses the code and refresh token flows but you can enable
                     // the other flows if you need to support implicit, password or client credentials.
                     options.AllowAuthorizationCodeFlow()
-                           .AllowRefreshTokenFlow();
+                        .AllowRefreshTokenFlow();
 
                     if (!Environment.IsDevelopment())
                     {
@@ -109,7 +117,8 @@ namespace Doitsu.Ecommerce.Presentation.Server
                     else
                     {
                         var certSection = Configuration.GetSection("OpenIdServerCertificate");
-                        var x509 = new X509Certificate2(File.ReadAllBytes(certSection["FileName"]), certSection["Password"]);
+                        var x509 = new X509Certificate2(File.ReadAllBytes(certSection["FileName"]),
+                            certSection["Password"]);
                         options.AddSigningCertificate(x509)
                             .AddEncryptionCertificate(x509);
                     }
@@ -118,16 +127,17 @@ namespace Doitsu.Ecommerce.Presentation.Server
                     {
                         services.Configure<ForwardedHeadersOptions>(opt =>
                         {
-                            opt.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
+                            opt.ForwardedHeaders =
+                                ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
                         });
                     }
 
                     // Register the ASP.NET Core host and configure the ASP.NET Core-specific options.
                     options.UseAspNetCore()
-                           .EnableAuthorizationEndpointPassthrough()
-                           .EnableLogoutEndpointPassthrough()
-                           .EnableStatusCodePagesIntegration()
-                           .EnableTokenEndpointPassthrough();
+                        .EnableAuthorizationEndpointPassthrough()
+                        .EnableLogoutEndpointPassthrough()
+                        .EnableStatusCodePagesIntegration()
+                        .EnableTokenEndpointPassthrough();
                 })
 
                 // Register the OpenIddict validation components.
@@ -154,7 +164,7 @@ namespace Doitsu.Ecommerce.Presentation.Server
             services.AddScoped<AuthenticationStateProvider, ServerAuthenticationStateProvider>();
             // Added by me
             services.AddScoped<SignOutSessionStateManager>();
-            
+
             services.AddSingleton<IWeatherForecastService, WeatherForecastService>();
 
             // Register the worker responsible of seeding the database with the sample clients.
@@ -201,9 +211,13 @@ namespace Doitsu.Ecommerce.Presentation.Server
             });
         }
 
+        #region Helper
+
         private bool IsCluster()
         {
             return Configuration.GetValue<bool>("Operation:IsCluster");
         }
+        
+        #endregion
     }
 }

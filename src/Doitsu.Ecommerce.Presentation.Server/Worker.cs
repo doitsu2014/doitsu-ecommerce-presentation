@@ -2,9 +2,9 @@
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Doitsu.Ecommerce.Presentation.Server.Constants;
-using Doitsu.Ecommerce.Presentation.Server.Data;
-using Doitsu.Ecommerce.Presentation.Server.Models;
+using Doitsu.Ecosystem.ApplicationCore.Constants;
+using Doitsu.Ecosystem.Infrastructure.Data;
+using Doitsu.Ecosystem.ApplicationCore.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;

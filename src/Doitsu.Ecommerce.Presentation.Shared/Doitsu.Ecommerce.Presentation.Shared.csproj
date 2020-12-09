@@ -13,4 +13,8 @@
     <Folder Include="Services" />
     <Folder Include="Services\" />
   </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Doitsu.Ecommerce.Presentation.Shared.Content\Doitsu.Ecommerce.Presentation.Shared.Content.csproj" />
+  </ItemGroup>
 </Project>

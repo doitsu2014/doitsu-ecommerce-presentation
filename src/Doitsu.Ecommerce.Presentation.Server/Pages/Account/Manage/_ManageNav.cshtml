@@ -1,4 +1,4 @@
-﻿@using Doitsu.Ecommerce.Presentation.Server.Models
+﻿@using Doitsu.Ecosystem.ApplicationCore.Models
 @inject SignInManager<ApplicationUser> SignInManager
 @{
     var hasExternalLogins = (await SignInManager.GetExternalAuthenticationSchemesAsync()).Any();
