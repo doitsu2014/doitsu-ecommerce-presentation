@@ -1,12 +1,11 @@
 ﻿@page
+@using Doitsu.Ecommerce.Presentation.Server.Helpers
 @model LoginModel
 
 @{
     Layout = "Shared/_BlankLayout";
     ViewData["Title"] = "Log in";
-    var externalButtons = new Dictionary<string, (string className, string iconName)>();
-    externalButtons.TryAdd("Facebook", new("btn btn-block btn-primary", "fab fa-facebook mr-2"));
-    externalButtons.TryAdd("Google", new("btn btn-block btn-danger", "fab fa-google-plus mr-2"));
+    var externalButtons = StaticDataExtensions.GetExternalButtonDictionary();
 }
 
 
@@ -62,8 +61,6 @@
                     <!-- /.col -->
                 </div>
             </form>
-
-
             @if ((Model.ExternalLogins?.Count ?? 0) != 0)
             {
                 <form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="social-auth-links text-center mb-3">
@@ -79,25 +76,17 @@
             <p class="mb-1">
                 <a id="forgot-password" asp-page="./ForgotPassword">Forgot your password?</a>
             </p>
-            <p class="mb-0">
+            <p class="mb-1">
                 <a id="resend-confirmation" asp-page="./ResendEmailConfirmation" class="text-center">Resend email confirmation</a>
+            </p>
+            <p class="mb-0">
+                <a id="register" asp-page="./Register" class="text-center">Create a new account</a>
             </p>
         </div>
         <!-- /.login-card-body -->
     </div>
 </div>
 <!-- /.login-box -->
-
-<div class="wrap-login100 p-l-55 p-r-55 p-t-65 p-b-54">
-
-
-    <hr/>
-    <div class="flex-col-c p-t-155">
-        <a class="txt2" asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl">
-            Register as a new user
-        </a>
-    </div>
-</div>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial"/>

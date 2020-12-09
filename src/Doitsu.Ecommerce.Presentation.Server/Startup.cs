@@ -61,7 +61,7 @@ namespace Doitsu.Ecommerce.Presentation.Server
                 .AddDefaultTokenProviders();
 
             services.AddScoped<IUserClaimsPrincipalFactory<ApplicationUser>, ApplicationUserClaimsPrincipalFactory>();
-            services.AddTransient<IEmailSender, AuthMessageService>();
+            services.AddSingleton<IEmailSender, AuthMessageService>();
 
             // Configure Identity to use the same JWT claims as OpenIddict instead
             // of the legacy WS-Federation claims it uses by default (ClaimTypes),
