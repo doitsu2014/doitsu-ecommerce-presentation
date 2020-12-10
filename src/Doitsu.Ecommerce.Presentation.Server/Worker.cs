@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -27,30 +28,35 @@ namespace Doitsu.Ecommerce.Presentation.Server
         {
             using var scope = _serviceProvider.CreateScope();
             var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-            await context.Database.EnsureCreatedAsync();
+            await context.Database.EnsureCreatedAsync(cancellationToken);
 
+            await RegisterDefaultScopesAsync(scope.ServiceProvider);
             await RegisterDefaultClientsAsync(scope.ServiceProvider);
             await RegisterDefaultUsersAsync(scope.ServiceProvider);
         }
 
         private async Task RegisterDefaultClientsAsync(IServiceProvider serviceProvider)
         {
-            var manager = serviceProvider.GetRequiredService<OpenIddictApplicationManager<OpenIddictEntityFrameworkCoreApplication>>();
-            if (await manager.FindByClientIdAsync("balosar-blazor-client") is null)
+            var applicationManager = serviceProvider
+                .GetRequiredService<OpenIddictApplicationManager<OpenIddictEntityFrameworkCoreApplication>>();
+            var configuration = serviceProvider.GetRequiredService<IConfiguration>();
+            var clientSection = configuration.GetSection("Initial:OpenIdClient");
+
+            if (await applicationManager.FindByClientIdAsync(clientSection["Admin:Id"]) is null)
             {
-                await manager.CreateAsync(new OpenIddictApplicationDescriptor
+                await applicationManager.CreateAsync(new OpenIddictApplicationDescriptor
                 {
-                    ClientId = "balosar-blazor-client",
+                    ClientId = clientSection["Admin:Id"],
                     ConsentType = ConsentTypes.Explicit,
-                    DisplayName = "Blazor client application",
+                    DisplayName = clientSection["Admin:DisplayName"],
                     Type = ClientTypes.Public,
                     PostLogoutRedirectUris =
                     {
-                        new Uri("https://localhost:5001/authentication/logout-callback")
+                        new Uri($"{clientSection["Admin:Uri"]}/authentication/logout-callback")
                     },
                     RedirectUris =
                     {
-                        new Uri("https://localhost:5001/authentication/login-callback")
+                        new Uri($"{clientSection["Admin:Uri"]}/authentication/login-callback")
                     },
                     Permissions =
                     {
@@ -62,7 +68,8 @@ namespace Doitsu.Ecommerce.Presentation.Server
                         Permissions.ResponseTypes.Code,
                         Permissions.Scopes.Email,
                         Permissions.Scopes.Profile,
-                        Permissions.Scopes.Roles
+                        Permissions.Scopes.Roles,
+                        $"{Permissions.Prefixes.Scope}{ScopeNameConstants.DoitsuEcommerceServicesAll}"
                     },
                     Requirements =
                     {
@@ -71,7 +78,66 @@ namespace Doitsu.Ecommerce.Presentation.Server
                 });
             }
 
+            if (await applicationManager.FindByClientIdAsync(clientSection["Customer:Id"]) is null)
+            {
+                await applicationManager.CreateAsync(new OpenIddictApplicationDescriptor
+                {
+                    ClientId = clientSection["Customer:Id"],
+                    ConsentType = ConsentTypes.Explicit,
+                    DisplayName = clientSection["Customer:DisplayName"],
+                    Type = ClientTypes.Public,
+                    PostLogoutRedirectUris =
+                    {
+                        new Uri($"{clientSection["Customer:Uri"]}/authentication/logout-callback")
+                    },
+                    RedirectUris =
+                    {
+                        new Uri($"{clientSection["Customer:Uri"]}/authentication/login-callback")
+                    },
+                    Permissions =
+                    {
+                        Permissions.Endpoints.Authorization,
+                        Permissions.Endpoints.Logout,
+                        Permissions.Endpoints.Token,
+                        Permissions.GrantTypes.AuthorizationCode,
+                        Permissions.GrantTypes.RefreshToken,
+                        Permissions.ResponseTypes.Code,
+                        Permissions.Scopes.Email,
+                        Permissions.Scopes.Profile,
+                        Permissions.Scopes.Roles,
+                        $"{Permissions.Prefixes.Scope}{ScopeNameConstants.DoitsuEcommerceServicesAll}"
+                    },
+                    Requirements =
+                    {
+                        Requirements.Features.ProofKeyForCodeExchange
+                    }
+                });
+            }
+        }
 
+        private async Task RegisterDefaultScopesAsync(IServiceProvider serviceProvider)
+        {
+            var scopeManager = serviceProvider.GetRequiredService<IOpenIddictScopeManager>();
+            if (await scopeManager.FindByNameAsync(ScopeNameConstants.DoitsuEcommerceServicesAll) is null)
+            {
+                await scopeManager.CreateAsync(new OpenIddictScopeDescriptor
+                {
+                    Name = ScopeNameConstants.DoitsuEcommerceServicesAll,
+                    DisplayName = "Doitsu Ecommerce All Services",
+                    DisplayNames =
+                    {
+                        [CultureInfo.GetCultureInfo("vn-VN")] = "Thương mại điện tử của Doitsu tất cả dịch vụ."
+                    },
+                    Resources =
+                    {
+                        ResourceNameConstants.ResourceBlogpost,
+                        ResourceNameConstants.ResourceProduct,
+                        ResourceNameConstants.ResourceDefault,
+                        ResourceNameConstants.ResourceUser,
+                        ResourceNameConstants.ResourceOrder
+                    }
+                });
+            }
         }
 
         private async Task RegisterDefaultUsersAsync(IServiceProvider serviceProvider)
@@ -81,7 +147,7 @@ namespace Doitsu.Ecommerce.Presentation.Server
             var configuration = serviceProvider.GetRequiredService<IConfiguration>();
             var adminUserSection = configuration.GetSection("Initial:AdminUser");
 
-            if (userManager.Users.Count() == 0)
+            if (!userManager.Users.Any())
             {
                 var adminUser = new ApplicationUser()
                 {
@@ -100,15 +166,14 @@ namespace Doitsu.Ecommerce.Presentation.Server
 
                 var listRoleNames = (new string[]
                 {
-                    IdentityRoleConstants.ADMIN,
-                    IdentityRoleConstants.CUSTOMER,
-                    IdentityRoleConstants.BLOG_MANAGER,
-                    IdentityRoleConstants.BLOG_PUBLISHER,
-                    IdentityRoleConstants.BLOG_WRITER
+                    IdentityRoleConstants.Admin,
+                    IdentityRoleConstants.Customer
                 });
-                if (roleManager.Roles.Count() == 0)
+
+                if (!roleManager.Roles.Any())
                 {
-                    var roles = listRoleNames.Select(r => new IdentityRole() { Id = Guid.NewGuid().ToString(), Name = r, NormalizedName = r.ToUpper() });
+                    var roles = listRoleNames.Select(r => new IdentityRole()
+                        {Id = Guid.NewGuid().ToString(), Name = r, NormalizedName = r.ToUpper()});
                     foreach (var role in roles) await roleManager.CreateAsync(role);
                 }
 

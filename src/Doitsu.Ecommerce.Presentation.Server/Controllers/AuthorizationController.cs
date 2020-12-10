@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Doitsu.Ecommerce.Presentation.Server.Helpers;
 using Doitsu.Ecosystem.ApplicationCore.Models;
 using Doitsu.Ecommerce.Presentation.Server.ViewModels.Authorization;
+using Doitsu.Ecosystem.ApplicationCore.Constants;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
@@ -54,7 +55,7 @@ namespace Doitsu.Ecommerce.Presentation.Server.Controllers
             // Retrieve the user principal stored in the authentication cookie.
             // If it can't be extracted, redirect the user to the login page.
             var result = await HttpContext.AuthenticateAsync(IdentityConstants.ApplicationScheme);
-            if (result == null || !result.Succeeded)
+            if (!result.Succeeded)
             {
                 // If the client application requested promptless authentication,
                 // return an error indicating that the user is not logged in.
@@ -262,7 +263,7 @@ namespace Doitsu.Ecommerce.Presentation.Server.Controllers
             // Automatically create a permanent authorization to avoid requiring explicit consent
             // for future authorization or token requests containing the same scopes.
             var authorization = authorizations.LastOrDefault();
-            if (authorization == null)
+            if(authorization == null)
             {
                 authorization = await _authorizationManager.CreateAsync(
                     principal: principal,
@@ -371,32 +372,28 @@ namespace Doitsu.Ecommerce.Presentation.Server.Controllers
             switch (claim.Type)
             {
                 case Claims.Name:
+                case ClaimTypeConstants.AVATAR:
+                case ClaimTypeConstants.ADDRESS_CITY:
+                case ClaimTypeConstants.ADDRESS_COUNTRY:
+                case ClaimTypeConstants.ADDRESS_STATE:
+                case ClaimTypeConstants.ADDRESS_STREET:
+                case ClaimTypeConstants.ADDRESS_ZIP_CODE:
                     yield return Destinations.AccessToken;
-
                     if (principal.HasScope(Scopes.Profile))
                         yield return Destinations.IdentityToken;
-
                     yield break;
-
                 case Claims.Email:
                     yield return Destinations.AccessToken;
-
                     if (principal.HasScope(Scopes.Email))
                         yield return Destinations.IdentityToken;
-
                     yield break;
-
                 case Claims.Role:
                     yield return Destinations.AccessToken;
-
                     if (principal.HasScope(Scopes.Roles))
                         yield return Destinations.IdentityToken;
-
                     yield break;
-
                 // Never include the security stamp in the access and identity tokens, as it's a secret value.
                 case "AspNet.Identity.SecurityStamp": yield break;
-
                 default:
                     yield return Destinations.AccessToken;
                     yield break;

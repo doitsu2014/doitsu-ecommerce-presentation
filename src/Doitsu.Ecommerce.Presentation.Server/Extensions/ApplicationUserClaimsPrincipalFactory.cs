@@ -2,8 +2,6 @@
 using Doitsu.Ecosystem.ApplicationCore.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
-using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -20,7 +18,7 @@ namespace Doitsu.Ecommerce.Presentation.Server.Extensions
         {
         }
 
-        public async override Task<ClaimsPrincipal> CreateAsync(ApplicationUser user)
+        public override async Task<ClaimsPrincipal> CreateAsync(ApplicationUser user)
         {
             var principal = await base.CreateAsync(user);
             var listAdditionalClaims = new (string key, string value)[] {
@@ -34,7 +32,9 @@ namespace Doitsu.Ecommerce.Presentation.Server.Extensions
             .Where(kv => !string.IsNullOrEmpty(kv.value))
             .Select(kv => new Claim(kv.key, kv.value))
             .ToArray();
-            ((ClaimsIdentity)principal.Identity).AddClaims(listAdditionalClaims);
+            
+            ((ClaimsIdentity)principal.Identity)?.AddClaims(listAdditionalClaims);
+            
             return principal;
         }
 
