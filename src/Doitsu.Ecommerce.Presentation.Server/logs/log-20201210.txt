@@ -20977,3 +20977,19 @@ System.IO.IOException:  Received an unexpected EOF or 0 bytes from the transport
 2020-12-10T18:00:08.9059323+07:00 [DBG] [11] [Microsoft.EntityFrameworkCore.Infrastructure] '"ApplicationDbContext"' disposed.
 2020-12-10T18:00:08.9106409+07:00 [DBG] [11] [Quartz.Core.JobRunShell] Trigger instruction : NoInstruction
 2020-12-10T18:00:08.9143326+07:00 [DBG] [4] [Quartz.Core.QuartzSchedulerThread] Batch acquisition of 0 triggers
+2020-12-10T18:00:34.5344213+07:00 [DBG] [4] [Quartz.Core.QuartzSchedulerThread] Batch acquisition of 0 triggers
+2020-12-10T18:01:01.3498581+07:00 [DBG] [4] [Quartz.Core.QuartzSchedulerThread] Batch acquisition of 0 triggers
+2020-12-10T18:01:26.3437589+07:00 [DBG] [4] [Quartz.Core.QuartzSchedulerThread] Batch acquisition of 0 triggers
+2020-12-10T18:01:51.7676627+07:00 [DBG] [4] [Quartz.Core.QuartzSchedulerThread] Batch acquisition of 0 triggers
+2020-12-10T18:02:17.0158768+07:00 [DBG] [4] [Quartz.Core.QuartzSchedulerThread] Batch acquisition of 0 triggers
+2020-12-10T18:02:42.5936844+07:00 [DBG] [4] [Quartz.Core.QuartzSchedulerThread] Batch acquisition of 0 triggers
+2020-12-10T18:03:09.5636117+07:00 [DBG] [4] [Quartz.Core.QuartzSchedulerThread] Batch acquisition of 0 triggers
+2020-12-10T18:03:34.4228252+07:00 [DBG] [4] [Quartz.Core.QuartzSchedulerThread] Batch acquisition of 0 triggers
+2020-12-10T18:03:59.9282846+07:00 [DBG] [4] [Quartz.Core.QuartzSchedulerThread] Batch acquisition of 0 triggers
+2020-12-10T18:04:27.1230554+07:00 [DBG] [4] [Quartz.Core.QuartzSchedulerThread] Batch acquisition of 0 triggers
+2020-12-10T18:04:52.1824033+07:00 [DBG] [4] [Quartz.Core.QuartzSchedulerThread] Batch acquisition of 0 triggers
+2020-12-10T18:05:17.4177529+07:00 [DBG] [4] [Quartz.Core.QuartzSchedulerThread] Batch acquisition of 0 triggers
+2020-12-10T18:05:46.0219855+07:00 [DBG] [4] [Quartz.Core.QuartzSchedulerThread] Batch acquisition of 0 triggers
+2020-12-10T18:06:11.6090208+07:00 [DBG] [4] [Quartz.Core.QuartzSchedulerThread] Batch acquisition of 0 triggers
+2020-12-10T18:06:39.3271711+07:00 [DBG] [4] [Quartz.Core.QuartzSchedulerThread] Batch acquisition of 0 triggers
+2020-12-10T18:07:06.8182095+07:00 [DBG] [4] [Quartz.Core.QuartzSchedulerThread] Batch acquisition of 0 triggers
