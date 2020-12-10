@@ -1,11 +1,16 @@
 using System;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Doitsu.Ecommerce.Presentation.Client.Services;
 using Doitsu.Ecommerce.Presentation.Shared.Interfaces;
-using Doitsu.Ecommerce.Presentation.Shared.Services;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Serilog;
+using Serilog.Core;
+using Serilog.Events;
 
 namespace Doitsu.Ecommerce.Presentation.Client
 {
@@ -15,6 +20,13 @@ namespace Doitsu.Ecommerce.Presentation.Client
         {
             var builder = WebAssemblyHostBuilder.CreateDefault(args);
             // builder.RootComponents.Add<App>("#app");
+
+            Log.Logger = new LoggerConfiguration()
+                    .MinimumLevel.ControlledBy(new LoggingLevelSwitch(LogEventLevel.Debug))
+                    .Enrich.FromLogContext()
+                    .Enrich.WithMachineName()
+                    .WriteTo.BrowserConsole()
+                    .CreateLogger();
 
             builder.Services.AddHttpClient("Doitsu.Ecommerce.Presentation.ServerAPI")
                 .ConfigureHttpClient(client => client.BaseAddress = new Uri(builder.HostEnvironment.BaseAddress))
@@ -28,15 +40,11 @@ namespace Doitsu.Ecommerce.Presentation.Client
                 var factory = provider.GetRequiredService<IHttpClientFactory>();
                 return factory.CreateClient("Doitsu.Ecommerce.Presentation.ServerAPI");
             });
-            
+
             builder.Services.AddOidcAuthentication(options =>
             {
-                options.ProviderOptions.ClientId = "balosar-blazor-client";
-                options.ProviderOptions.Authority = "https://localhost:5001/";
-                options.ProviderOptions.ResponseType = "code";
-                options.ProviderOptions.ResponseMode = "fragment";
-                options.AuthenticationPaths.RemoteRegisterPath = "https://localhost:5001/Account/Register";
-                options.AuthenticationPaths.RemoteProfilePath = "https://localhost:5001/Account/Manage";
+                builder.Configuration.Bind("Oidc:ProviderOptions", options.ProviderOptions);
+                builder.Configuration.Bind("Oidc:AuthenticationPaths", options.AuthenticationPaths);
             });
 
             var host = builder.Build();

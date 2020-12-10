@@ -19,6 +19,7 @@ using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Server;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using Microsoft.AspNetCore.Mvc;
+using Quartz;
 using static OpenIddict.Abstractions.OpenIddictConstants;
 
 namespace Doitsu.Ecommerce.Presentation.Server
@@ -79,6 +80,18 @@ namespace Doitsu.Ecommerce.Presentation.Server
                     options.Conventions.AuthorizeFolder("/Account/Manage");
                     options.Conventions.AuthorizePage("/Account/Logout");
                 });
+            
+            // OpenIddict offers native integration with Quartz.NET to perform scheduled tasks
+            // (like pruning orphaned authorizations/tokens from the database) at regular intervals.
+            services.AddQuartz(options =>
+            {
+                options.UseMicrosoftDependencyInjectionJobFactory();
+                options.UseSimpleTypeLoader();
+                options.UseInMemoryStore();
+            });
+
+            // Register the Quartz.NET service and configure it to block shutdown until jobs are complete.
+            services.AddQuartzHostedService(options => options.WaitForJobsToComplete = true);
 
             services.AddOpenIddict()
 
@@ -89,6 +102,8 @@ namespace Doitsu.Ecommerce.Presentation.Server
                     // Note: call ReplaceDefaultEntities() to replace the default OpenIddict entities.
                     options.UseEntityFrameworkCore()
                         .UseDbContext<ApplicationDbContext>();
+
+                    options.UseQuartz();
                 })
 
                 // Register the OpenIddict server components.
