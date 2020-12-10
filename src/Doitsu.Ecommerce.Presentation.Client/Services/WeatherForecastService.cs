@@ -3,6 +3,7 @@ using System.Net.Http.Json;
 using System.Threading.Tasks;
 using Doitsu.Ecommerce.Presentation.Shared;
 using Doitsu.Ecommerce.Presentation.Shared.Interfaces;
+using Microsoft.Extensions.Logging;
 
 namespace Doitsu.Ecommerce.Presentation.Client.Services
 {

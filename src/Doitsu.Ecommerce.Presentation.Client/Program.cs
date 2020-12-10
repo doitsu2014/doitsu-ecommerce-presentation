@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Serilog;
 using Serilog.Core;
 using Serilog.Events;
@@ -19,15 +20,14 @@ namespace Doitsu.Ecommerce.Presentation.Client
         {
             var builder = WebAssemblyHostBuilder.CreateDefault(args);
             // builder.RootComponents.Add<App>("#app");
-            Log.Logger = new LoggerConfiguration()
-                .MinimumLevel.ControlledBy(new LoggingLevelSwitch(LogEventLevel.Debug))
-                .WriteTo.BrowserConsole()
-                .CreateLogger();
 
-            Log.Information("Hello, browser!");
-            
-            Log.Information("{@a}", builder.Configuration.Build().GetSection("Serilog").GetValue<string>("MiniumLevel.Default"));
-            
+            Log.Logger = new LoggerConfiguration()
+                    .MinimumLevel.ControlledBy(new LoggingLevelSwitch(LogEventLevel.Debug))
+                    .Enrich.FromLogContext()
+                    .Enrich.WithMachineName()
+                    .WriteTo.BrowserConsole()
+                    .CreateLogger();
+
             builder.Services.AddHttpClient("Doitsu.Ecommerce.Presentation.ServerAPI")
                 .ConfigureHttpClient(client => client.BaseAddress = new Uri(builder.HostEnvironment.BaseAddress))
                 .AddHttpMessageHandler<BaseAddressAuthorizationMessageHandler>();
